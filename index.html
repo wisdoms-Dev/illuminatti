@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Illuminati Council of Initiators — A Fictional Story</title>
+<meta name="description" content="">
+
+<!-- Google Fonts: a restrained display serif for headings, a quiet sans for body/UI -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* =========================================================
+     TOKENS
+     Palette:  #08080a (void)   #efe8d6 (parchment ink)
+               #c9a24b (council gold)  #6f5b26 (muted gold / rule lines)
+               #121216 (panel)  
+     Type: Cormorant Garamond (display/serif) + Jost (body/sans)
+     ========================================================= */
+  :root{
+    --void: #08080a;
+    --panel: #121216;
+    --panel-2: #17171c;
+    --ink: #efe8d6;
+    --ink-dim: rgba(239,232,214,0.62);
+    --gold: #c9a24b;
+    --gold-bright: #e6c878;
+    --gold-dim: #6f5b26;
+    --rule: rgba(201,162,75,0.22);
+    --serif: 'Cormorant Garamond', 'Times New Roman', serif;
+    --sans: 'Jost', -apple-system, BlinkMacSystemFont, sans-serif;
+    --ease: cubic-bezier(.16,.8,.24,1);
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+
+  body{
+    background:var(--void);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-weight:300;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+  ul{ list-style:none; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  ::selection{ background:var(--gold-dim); color:var(--ink); }
+
+  /* focus visibility, kept for accessibility */
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible{
+    outline:1px solid var(--gold-bright);
+    outline-offset:4px;
+  }
+
+  .container{
+    max-width:1080px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  /* fictional-project banner, always visible, never hidden by design */
+  .fiction-banner{
+    background:var(--panel);
+    border-bottom:1px solid var(--rule);
+    color:var(--ink-dim);
+    font-size:0.72rem;
+    letter-spacing:0.06em;
+    text-align:center;
+    padding:8px 16px;
+  }
+  .fiction-banner strong{ color:var(--gold); font-weight:500; }
+
+  /* =========================================================
+     NAV
+     ========================================================= */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(8,8,10,0.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--rule);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 24px;
+    max-width:1080px; margin:0 auto;
+  }
+  .brand{
+    font-family:var(--serif);
+    font-size:1.15rem;
+    letter-spacing:0.04em;
+    display:flex; align-items:center; gap:10px;
+  }
+  .brand svg{ width:20px; height:20px; }
+  .nav-links{ display:none; gap:32px; font-size:0.85rem; letter-spacing:0.03em; }
+  .nav-links a{ color:var(--ink-dim); transition:color .3s var(--ease); }
+  .nav-links a:hover{ color:var(--gold-bright); }
+  @media (min-width:760px){ .nav-links{ display:flex; } }
+
+  .nav-cta{
+    border:1px solid var(--gold-dim);
+    color:var(--gold-bright);
+    padding:9px 18px;
+    font-size:0.78rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    transition:border-color .3s var(--ease), background .3s var(--ease);
+  }
+  .nav-cta:hover{ border-color:var(--gold-bright); background:rgba(201,162,75,0.08); }
+
+  /* =========================================================
+     HERO — signature element: a single line-drawn triangle
+     that inscribes itself on load, with a slow ambient drift.
+     ========================================================= */
+  .hero{
+    position:relative;
+    min-height:92vh;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center;
+    padding:120px 24px 80px;
+    overflow:hidden;
+  }
+
+  .hero-glow{
+    position:absolute; inset:0;
+    background:radial-gradient(ellipse 60% 50% at 50% 40%, rgba(201,162,75,0.10), transparent 70%);
+    pointer-events:none;
+  }
+
+  .hero-mark{
+    width:min(340px, 60vw);
+    height:auto;
+    margin:0 auto 36px;
+    opacity:0.9;
+  }
+  .hero-mark path, .hero-mark circle{
+    fill:none;
+    stroke:var(--gold);
+    stroke-width:0.6;
+    stroke-linecap:round;
+  }
+  .hero-mark .draw{
+    stroke-dasharray:900;
+    stroke-dashoffset:900;
+    animation:inscribe 2.6s var(--ease) forwards 0.3s;
+  }
+  .hero-mark .eye{
+    opacity:0;
+    animation:fadeIn 1.6s var(--ease) forwards 2.2s;
+  }
+  @keyframes inscribe{ to{ stroke-dashoffset:0; } }
+  @keyframes fadeIn{ to{ opacity:1; } }
+
+  .eyebrow{
+    font-size:0.72rem;
+    letter-spacing:0.32em;
+    text-transform:uppercase;
+    color:var(--gold-dim);
+    opacity:0;
+    animation:riseIn .9s var(--ease) forwards 2.6s;
+  }
+
+  h1.title{
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:clamp(2.4rem, 6vw, 4.6rem);
+    line-height:1.08;
+    letter-spacing:0.01em;
+    margin:14px 0 22px;
+    color:var(--ink);
+    opacity:0;
+    animation:riseIn 1s var(--ease) forwards 2.8s;
+  }
+  h1.title em{
+    font-style:italic;
+    color:var(--gold-bright);
+  }
+
+  .subtitle{
+    max-width:560px;
+    margin:0 auto 40px;
+    color:var(--ink-dim);
+    font-size:1.05rem;
+    font-weight:300;
+    opacity:0;
+    animation:riseIn 1s var(--ease) forwards 3.05s;
+  }
+
+  @keyframes riseIn{
+    from{ opacity:0; transform:translateY(14px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .btn-gold{
+    display:inline-block;
+    background:linear-gradient(180deg, var(--gold-bright), var(--gold));
+    color:#0a0a0a;
+    font-size:0.82rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    font-weight:500;
+    padding:16px 38px;
+    border:none;
+    position:relative;
+    opacity:0;
+    animation:riseIn 1s var(--ease) forwards 3.3s;
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease);
+  }
+  .btn-gold:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 30px -8px rgba(201,162,75,0.5);
+  }
+
+  /* =========================================================
+     SECTION SCAFFOLDING
+     ========================================================= */
+  section{ padding:110px 0; position:relative; }
+  .section-head{ text-align:center; max-width:640px; margin:0 auto 64px; }
+  .kicker{
+    font-size:0.72rem; letter-spacing:0.3em; text-transform:uppercase;
+    color:var(--gold-dim); margin-bottom:14px; display:block;
+  }
+  h2{
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:clamp(1.8rem, 4vw, 2.6rem);
+    color:var(--ink);
+  }
+  .lede{ color:var(--ink-dim); margin-top:16px; font-size:1rem; }
+
+  .reveal{
+    opacity:0; transform:translateY(24px);
+    transition:opacity .8s var(--ease), transform .8s var(--ease);
+  }
+  .reveal.is-visible{ opacity:1; transform:translateY(0); }
+
+  /* =========================================================
+     ABOUT — tenets, not steps: a quiet vertical ledger,
+     joined by a single gold thread rather than numbering,
+     since these values hold simultaneously, not in sequence.
+     ========================================================= */
+  .about{ background:var(--panel); border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); }
+
+  .tenets{
+    max-width:720px; margin:0 auto;
+    position:relative;
+  }
+  .tenets::before{
+    content:'';
+    position:absolute; left:0; top:6px; bottom:6px; width:1px;
+    background:linear-gradient(var(--gold-dim), transparent 96%);
+  }
+  @media (min-width:640px){ .tenets::before{ left:50%; } }
+
+  .tenet{
+    position:relative;
+    padding:0 0 0 28px;
+    margin-bottom:44px;
+  }
+  .tenet:last-child{ margin-bottom:0; }
+  .tenet::before{
+    content:'';
+    position:absolute; left:-4px; top:6px;
+    width:9px; height:9px; border-radius:50%;
+    background:var(--void); border:1px solid var(--gold);
+  }
+  .tenet h3{
+    font-family:var(--serif); font-weight:600; font-size:1.35rem;
+    color:var(--gold-bright); margin-bottom:6px; letter-spacing:0.01em;
+  }
+  .tenet p{ color:var(--ink-dim); font-size:0.96rem; max-width:52ch; }
+
+  @media (min-width:640px){
+    .tenet{ width:calc(50% - 40px); padding-left:0; }
+    .tenet::before{ left:auto; }
+    .tenet:nth-child(odd){ margin-right:auto; padding-right:40px; text-align:right; }
+    .tenet:nth-child(odd)::before{ right:-45px; left:auto; }
+    .tenet:nth-child(even){ margin-left:auto; padding-left:40px; }
+    .tenet:nth-child(even)::before{ left:-45px; }
+  }
+
+  /* =========================================================
+     MEMBERSHIP FORM (demo only)
+     ========================================================= */
+  .apply-card{
+    max-width:620px; margin:0 auto;
+    background:var(--panel-2);
+    border:1px solid var(--rule);
+    padding:44px clamp(22px, 5vw, 56px);
+    position:relative;
+  }
+  .apply-card::before{
+    content:''; position:absolute; inset:8px;
+    border:1px solid var(--rule);
+    pointer-events:none;
+  }
+
+  .field{ margin-bottom:26px; }
+  .field label{
+    display:block; font-size:0.78rem; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--gold); margin-bottom:10px;
+  }
+  .field input, .field textarea{
+    width:100%;
+    background:transparent;
+    border:none;
+    border-bottom:1px solid var(--rule);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:1rem;
+    padding:10px 2px;
+    transition:border-color .3s var(--ease);
+    resize:vertical;
+  }
+  .field textarea{ min-height:90px; line-height:1.5; }
+  .field input::placeholder, .field textarea::placeholder{ color:rgba(239,232,214,0.28); }
+  .field input:focus, .field textarea:focus{
+    border-color:var(--gold-bright);
+    outline:none;
+  }
+
+  .form-note{
+    font-size:0.78rem; color:var(--ink-dim); margin-top:-6px; margin-bottom:26px;
+  }
+
+  .submit-row{ display:flex; align-items:center; gap:18px; margin-top:8px; flex-wrap:wrap; }
+
+  #confirmation{
+    display:none;
+    background:rgba(201,162,75,0.08);
+    border:1px solid var(--gold-dim);
+    padding:20px 22px;
+    margin-top:26px;
+    font-size:0.95rem;
+    color:var(--gold-bright);
+  }
+  #confirmation.show{ display:block; animation:riseIn .6s var(--ease) forwards; }
+
+  /* =========================================================
+     CONTACT
+     ========================================================= */
+  .contact-grid{
+    display:grid; gap:18px;
+    grid-template-columns:1fr;
+    max-width:720px; margin:0 auto;
+  }
+  @media (min-width:640px){ .contact-grid{ grid-template-columns:repeat(3,1fr); } }
+
+  .contact-btn{
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+    border:1px solid var(--rule);
+    padding:32px 18px;
+    background:var(--panel);
+    transition:border-color .35s var(--ease), transform .35s var(--ease);
+  }
+  .contact-btn:hover{ border-color:var(--gold); transform:translateY(-4px); }
+  .contact-btn svg{ width:26px; height:26px; stroke:var(--gold-bright); fill:none; stroke-width:1.4; }
+  .contact-btn span{ font-size:0.85rem; letter-spacing:0.04em; color:var(--ink-dim); }
+
+  /* =========================================================
+     FOOTER
+     ========================================================= */
+  footer{
+    border-top:1px solid var(--rule);
+    padding:56px 0 34px;
+    text-align:center;
+    color:var(--ink-dim);
+    font-size:0.82rem;
+  }
+  .footer-links{
+    display:flex; justify-content:center; gap:26px; margin:18px 0 26px;
+    flex-wrap:wrap;
+  }
+  .footer-links a{ color:var(--ink-dim); transition:color .3s var(--ease); }
+  .footer-links a:hover{ color:var(--gold-bright); }
+
+  .footer-fiction-notice{
+    max-width:520px; margin:0 auto;
+    border-top:1px solid var(--rule);
+    padding-top:22px;
+    font-size:0.76rem;
+    line-height:1.7;
+    color:rgba(239,232,214,0.45);
+  }
+  .footer-fiction-notice strong{ color:var(--gold-dim); }
+
+  /* modal for placeholder legal pages */
+  .modal-backdrop{
+    display:none; position:fixed; inset:0; z-index:100;
+    background:rgba(0,0,0,0.7);
+    align-items:center; justify-content:center; padding:24px;
+  }
+  .modal-backdrop.show{ display:flex; }
+  .modal{
+    background:var(--panel-2); border:1px solid var(--rule);
+    max-width:480px; width:100%; padding:32px;
+  }
+  .modal h3{ font-family:var(--serif); color:var(--gold-bright); margin-bottom:14px; font-size:1.4rem; }
+  .modal p{ color:var(--ink-dim); font-size:0.9rem; margin-bottom:20px; }
+  .modal button{
+    background:none; border:1px solid var(--gold-dim); color:var(--gold-bright);
+    padding:9px 20px; font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase;
+  }
+</style>
+</head>
+<body>
+
+  <!-- Fiction disclosure banner: persistent, top of page -->
+  <div class="fiction-banner">
+    <strong>Fictional creative project</strong> — no real organization, membership, or affiliation exists.
+  </div>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="#top" class="brand">
+        <svg viewBox="0 0 24 24"><path d="M12 2 L22 20 L2 20 Z" stroke="#c9a24b" stroke-width="1.2" fill="none"/></svg>
+        The Council
+      </a>
+      <nav class="nav-links">
+        <a href="#about">Philosophy</a>
+        <a href="#apply">Membership</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a href="#apply" class="nav-cta">Apply</a>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="top">
+    <div class="hero-glow"></div>
+    <div class="container">
+      <svg class="hero-mark" viewBox="0 0 200 180" aria-hidden="true">
+        <path class="draw" d="M100 12 L188 168 L12 168 Z"/>
+        <circle class="eye" cx="100" cy="120" r="18"/>
+        <path class="eye" d="M78 120 Q100 104 122 120 Q100 136 78 120 Z"/>
+      </svg>
+      <span class="eyebrow">An Order of the Mind</span>
+      <h1 class="title">The Illuminati Council<br><em>of Initiators</em></h1>
+      <p class="subtitle">A fictional order devoted to knowledge, discipline, and quiet leadership — where personal growth is treated as a lifelong craft, and excellence as a form of service.</p>
+      <a href="#apply" class="btn-gold">Apply for Membership</a>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="kicker">Philosophy</span>
+        <h2>Six Tenets, Held Together</h2>
+        <p class="lede">These are not steps to complete, but commitments held at once — each reinforcing the rest. (A fictional philosophy, written for this story.)</p>
+      </div>
+
+      <div class="tenets">
+        <div class="tenet reveal">
+          <h3>Lifelong Learning</h3>
+          <p>The Council treats curiosity as a discipline in itself — study is never finished, only deepened.</p>
+        </div>
+        <div class="tenet reveal">
+          <h3>Self-Discipline</h3>
+          <p>Mastery of one's own habits is regarded as the foundation every other pursuit is built upon.</p>
+        </div>
+        <div class="tenet reveal">
+          <h3>Leadership</h3>
+          <p>To lead is to serve first — initiators are asked to earn trust before they ask for it.</p>
+        </div>
+        <div class="tenet reveal">
+          <h3>Wisdom</h3>
+          <p>Knowledge is common; wisdom is knowing when, and when not, to act on it.</p>
+        </div>
+        <div class="tenet reveal">
+          <h3>Service to Humanity</h3>
+          <p>Personal advancement is held to matter only insofar as it is eventually given back.</p>
+        </div>
+        <div class="tenet reveal">
+          <h3>Personal Achievement</h3>
+          <p>Excellence is pursued not for status, but as evidence that the other tenets were kept.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MEMBERSHIP APPLICATION (DEMO) ============ -->
+  <section id="apply">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="kicker">Membership</span>
+        <h2>Apply for Membership</h2>
+        <p class="lede">A demonstration form for this fictional story. Please do not submit real personal or sensitive information.</p>
+      </div>
+
+      <div class="apply-card reveal">
+        <form id="apply-form" novalidate>
+          <div class="field">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" name="fullName" placeholder="e.g. Jordan Vance" autocomplete="off" required>
+          </div>
+
+          <div class="field">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="off" required>
+          </div>
+
+          <div class="field">
+            <label for="interest">Why are you interested in joining?</label>
+            <textarea id="interest" name="interest" placeholder="Share a few sentences..." required></textarea>
+          </div>
+
+          <div class="field">
+            <label for="values">What values are most important to you?</label>
+            <textarea id="values" name="values" placeholder="e.g. discipline, curiosity, service..." required></textarea>
+          </div>
+
+          <p class="form-note">This is a fictional demo — no data is stored, verified, or reviewed by anyone.</p>
+
+          <div class="submit-row">
+            <button type="submit" class="btn-gold" style="opacity:1; animation:none;">Submit Application</button>
+          </div>
+
+          <div id="confirmation" role="status" aria-live="polite">
+            Thank you for your application. This is a fictional demonstration website.
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact" style="background:var(--panel); border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="kicker">Correspondence</span>
+        <h2>Reach the Council</h2>
+        <p class="lede">Placeholder channels for this fictional story — none are monitored.</p>
+      </div>
+
+      <div class="contact-grid reveal">
+        <a href="#" class="contact-btn" onclick="return false;">
+          <svg viewBox="0 0 24 24"><path d="M3 6h18v12H3z"/><path d="M3 6l9 7 9-7"/></svg>
+          <span>Email (placeholder)</span>
+        </a>
+        <a href="#" class="contact-btn" onclick="return false;">
+          <svg viewBox="0 0 24 24"><path d="M21 3 3 10.5l6.5 2.5L12 21l4-7 5-11Z"/></svg>
+          <span>Telegram (placeholder)</span>
+        </a>
+        <a href="#" class="contact-btn" onclick="return false;">
+          <svg viewBox="0 0 24 24"><path d="M4 20l1.6-4.8A8 8 0 1 1 9 19l-5 1Z"/></svg>
+          <span>WhatsApp (placeholder)</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="container">
+      <div class="brand" style="justify-content:center; margin-bottom:6px;">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;"><path d="M12 2 L22 20 L2 20 Z" stroke="#c9a24b" stroke-width="1.2" fill="none"/></svg>
+        The Illuminati Council of Initiators
+      </div>
+      <p>&copy; 2026 The Illuminati Council of Initiators. All rights reserved.</p>
+
+      <div class="footer-links">
+        <a href="#" data-modal="privacy">Privacy Policy</a>
+        <a href="#" data-modal="terms">Terms of Use</a>
+      </div>
+
+      <p class="footer-fiction-notice">
+        <strong>Notice:</strong> This website is a fictional creative project created for storytelling purposes. It does not represent, endorse, or solicit membership for any real-world organization, and no data submitted here is collected, stored, or used for any actual purpose.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Simple placeholder legal modals -->
+  <div class="modal-backdrop" id="modal-backdrop">
+    <div class="modal">
+      <h3 id="modal-title"></h3>
+      <p id="modal-body"></p>
+      <button id="modal-close">Close</button>
+    </div>
+  </div>
+
+  <script>
+    // ---------------------------------------------------------
+    // Smooth in-page navigation (progressive enhancement on top
+    // of CSS scroll-behavior, for older browsers)
+    // ---------------------------------------------------------
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', e => {
+        const id = link.getAttribute('href').slice(1);
+        const target = document.getElementById(id);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // ---------------------------------------------------------
+    // Scroll-reveal: fade/rise elements into view once as the
+    // user scrolls past them.
+    // ---------------------------------------------------------
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => revealObserver.observe(el));
+
+    // ---------------------------------------------------------
+    // Membership application (demo only): prevents real
+    // submission, shows the required confirmation message,
+    // and never persists or transmits the entered data.
+    // ---------------------------------------------------------
+    const form = document.getElementById('apply-form');
+    const confirmation = document.getElementById('confirmation');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      confirmation.classList.add('show');
+      confirmation.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      form.reset();
+    });
+
+    // ---------------------------------------------------------
+    // Placeholder legal pages (Privacy Policy / Terms of Use)
+    // shown as simple modals, clearly marked as part of the
+    // fictional project.
+    // ---------------------------------------------------------
+    const modalBackdrop = document.getElementById('modal-backdrop');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+
+    const modalContent = {
+      privacy: {
+        title: 'Privacy Policy (Fictional)',
+        body: 'This is a placeholder policy for a fictional website. No real data is collected, stored, sold, or shared, because this page is part of a creative story rather than an operating service.'
+      },
+      terms: {
+        title: 'Terms of Use (Fictional)',
+        body: 'This is a placeholder terms page for a fictional website. There is no real membership, service, or agreement being offered here — it exists solely as part of a creative project.'
+      }
+    };
+
+    document.querySelectorAll('[data-modal]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const key = link.getAttribute('data-modal');
+        modalTitle.textContent = modalContent[key].title;
+        modalBody.textContent = modalContent[key].body;
+        modalBackdrop.classList.add('show');
+      });
+    });
+
+    document.getElementById('modal-close').addEventListener('click', () => {
+      modalBackdrop.classList.remove('show');
+    });
+    modalBackdrop.addEventListener('click', (e) => {
+      if (e.target === modalBackdrop) modalBackdrop.classList.remove('show');
+    });
+  </script>
+
+</body>
+</html>
